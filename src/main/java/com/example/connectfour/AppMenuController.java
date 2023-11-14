@@ -24,6 +24,7 @@ public class AppMenuController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(new Scene(root,700,700));
         stage.show();
+
     }
 
     @FXML

@@ -13,7 +13,10 @@ public class GameFacade {
         }
         return instance;
     }
-    public void initGame(GridPane gridPane){
-
+    public void initGame(){
+        game = Game.getGameInstance();
+    }
+    public void sendMove(){
+        //game.move() or something
     }
 }
