@@ -1,7 +1,5 @@
 package com.example.connectfour;
 
-import javafx.scene.layout.GridPane;
-
 public class GameFacade {
     private static GameFacade instance;
     private GameFacade(){}
@@ -15,8 +13,12 @@ public class GameFacade {
     }
     public void initGame(){
         game = Game.getGameInstance();
+        game.resetGame();
     }
-    public void sendMove(){
-        //game.move() or something
+    public Field[][] sendMove(int columnIndex){
+        return game.move(columnIndex);
+    }
+    public Field.Colors getCurrentTurn(){
+        return game.getCurrentTurn();
     }
 }

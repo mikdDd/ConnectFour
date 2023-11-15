@@ -1,10 +1,11 @@
 package com.example.connectfour;
 
 public class Game {
-    private Circle[] Board;
+
+
     private String gameState;
 
-
+    private GameLogicTemplate gameLogic = new BasicGameLogic();
     private static Game gameInstance;
 
     private Game(){}
@@ -25,6 +26,17 @@ public class Game {
             return this.gameState;
         }
 
+    }
+    //TODO: argument indicating of which type game we want to play
+    public void resetGame(){
+        gameLogic = new BasicGameLogic();
+    }
+    public Field[][] move(int columnIndex){
+        gameLogic.tryMove(columnIndex);
+        return gameLogic.getBoard();
+    }
+    public Field.Colors getCurrentTurn(){
+        return gameLogic.getCurrentTurn();
     }
 
 }
