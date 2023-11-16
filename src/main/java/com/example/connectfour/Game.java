@@ -38,6 +38,7 @@ public class Game {
     public Field[][] move(int columnIndex){
         gameLogic.tryMove(columnIndex);
         gameSnapshot.undoStack.push(columnIndex);
+        gameSnapshot.redoStack.clear();
         return gameLogic.getBoard();
     }
     public Field [][] undoMove(){
