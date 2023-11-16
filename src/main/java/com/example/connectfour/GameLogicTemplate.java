@@ -6,6 +6,8 @@ public abstract class GameLogicTemplate {
     private final int boardRowCount;
     protected Field.Colors currentTurn = Field.Colors.YELLOW;
 
+    public abstract void tryUndo(int columnIndex);
+    public abstract void tryRedo(int columnIndex);
     public abstract void tryMove(int columnIndex);
     protected abstract void changeTurn();
     protected abstract boolean checkIfWon(int r, int c);

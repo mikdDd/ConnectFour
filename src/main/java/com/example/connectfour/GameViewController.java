@@ -32,6 +32,15 @@ public class GameViewController implements Initializable {
         updateView(board);
     }
 
+    private void requestRedoMove(){
+        Field[][] board= gameFacade.sendRedoMove();
+        updateView(board);
+    }
+    private void requestUndoMove(){
+        Field[][] board= gameFacade.sendUndoMove();
+        updateView(board);
+    }
+
     @FXML
     private void mousePressed(MouseEvent event) {
         Node source = (Node)event.getSource() ;
@@ -65,7 +74,7 @@ public class GameViewController implements Initializable {
     }
     @FXML
     void onRedoButtonClick(MouseEvent event) {
-        //TODO:
+        requestRedoMove();
     }
 
     @FXML
@@ -75,6 +84,6 @@ public class GameViewController implements Initializable {
 
     @FXML
     void onUndoButtonClick(MouseEvent event) {
-        //TODO:
+        requestUndoMove();
     }
 }

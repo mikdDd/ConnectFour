@@ -11,6 +11,31 @@ public class BasicGameLogic extends GameLogicTemplate{
     }
 
     @Override
+    public void tryUndo(int columnIndex) {
+        for (int i=0; i<BASICGAMEROWCOUNT; i++){
+            if ( !board[i][columnIndex].color.equals(Field.Colors.TRANSPARENT)){
+                board[i][columnIndex].color=Field.Colors.TRANSPARENT;
+                break;
+            }
+        }
+        changeTurn();
+    }
+
+    @Override
+    public void tryRedo(int columnIndex) {
+        for (int i=0; i<BASICGAMEROWCOUNT; i++){
+            if ( !board[i][columnIndex].color.equals(Field.Colors.TRANSPARENT)){
+                board[i-1][columnIndex].color=currentTurn;
+                break;
+            }
+            if (i==BASICGAMEROWCOUNT-1){
+                board[BASICGAMEROWCOUNT -1][columnIndex].color=currentTurn;
+            }
+        }
+        changeTurn();
+    }
+
+    @Override
     public void tryMove(int columnIndex) {
         int rowIndex = -1;
         for (int i = 0; i < BASICGAMEROWCOUNT; i++) {

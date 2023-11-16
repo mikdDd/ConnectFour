@@ -18,6 +18,12 @@ public class GameFacade {
     public Field[][] sendMove(int columnIndex){
         return game.move(columnIndex);
     }
+    public Field[][] sendUndoMove(){
+        return game.undoMove();
+    }
+    public Field[][] sendRedoMove(){
+        return game.redoMove();
+    }
     public Field.Colors getCurrentTurn(){
         return game.getCurrentTurn();
     }
