@@ -18,7 +18,7 @@
       <children>
          <Button mnemonicParsing="false" onMouseClicked="#onUndoButtonClick" prefHeight="50.0" prefWidth="170.0" text="undo" />
          <Button mnemonicParsing="false" onMouseClicked="#onRedoButtonClick" prefHeight="50.0" prefWidth="170.0" text="redo" />
-         <Button mnemonicParsing="false" onMouseClicked="#onSaveButtonClick" prefHeight="50.0" prefWidth="170.0" text="save" />
+         <Button fx:id="saveButton" mnemonicParsing="false" onMouseClicked="#onSaveButtonClick" prefHeight="50.0" prefWidth="170.0" text="save" />
          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current turn:" textAlignment="RIGHT" wrappingWidth="160.13671875" />
          <Circle fx:id="turnIndicator" fill="WHITE" radius="27.0" stroke="BLACK" strokeType="INSIDE" />
       </children>

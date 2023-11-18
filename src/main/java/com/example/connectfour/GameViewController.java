@@ -6,11 +6,10 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class GameViewController implements Initializable {
@@ -22,8 +21,14 @@ public class GameViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameFacade = GameFacade.getGameFacadeInstance();
-        gameFacade.initGame();
+        Game.GameSnapshot loadedSnapshot=(Game.GameSnapshot)resourceBundle;
+        if (loadedSnapshot==null){//initialize new game
+            gameFacade.initGame();
+        }else {//load game
+            gameFacade.loadGame(loadedSnapshot);
+        }
         turnIndicator.setFill(Field.getFXColor(gameFacade.getCurrentTurn()));
+        requestLoad();
     }
 
     //TODO:
@@ -39,6 +44,14 @@ public class GameViewController implements Initializable {
     private void requestUndoMove(){
         Field[][] board= gameFacade.sendUndoMove();
         updateView(board);
+    }
+    private void requestLoad(){
+        Field[][] board=gameFacade.loadMoves();
+        updateView(board);
+    }
+
+    private void requestSave(){
+        gameFacade.save();
     }
 
     @FXML
@@ -79,7 +92,9 @@ public class GameViewController implements Initializable {
 
     @FXML
     void onSaveButtonClick(MouseEvent event) {
-        //TODO:
+        requestSave();
+        Stage stage=(Stage) GridPane.getScene().getWindow();
+        stage.close();
     }
 
     @FXML

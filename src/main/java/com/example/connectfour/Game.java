@@ -1,10 +1,12 @@
 package com.example.connectfour;
 
-import java.util.Stack;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
+
 public class Game {
 
-
-    private String gameState;
 
     private GameLogicTemplate gameLogic = new BasicGameLogic();
     private static Game gameInstance;
@@ -13,16 +15,18 @@ public class Game {
     private Game(){}
 
     public static Game getGameInstance() {
-        if(gameInstance == null){
-            gameInstance = new Game();
-        }
-        if (gameSnapshot == null){
-            gameSnapshot = new GameSnapshot(new Stack<Integer>(),new Stack<Integer>());
-        }
+        gameInstance = new Game();
+        gameSnapshot = new GameSnapshot(new Stack<Integer>(),new Stack<Integer>());
         return gameInstance;
     }
 
-    public static class GameSnapshot {
+    public static Game getGameInstance(Game.GameSnapshot loadSnaphot) {
+        gameInstance = new Game();
+        gameSnapshot = loadSnaphot;
+        return gameInstance;
+    }
+
+    public static class GameSnapshot extends ResourceBundle {
         private Stack<Integer> undoStack;
         private Stack<Integer> redoStack;
         public GameSnapshot(Stack<Integer> undoStack, Stack<Integer> redoStack) {
@@ -30,6 +34,23 @@ public class Game {
             this.redoStack = redoStack;
         }
 
+        public Stack<Integer> getUndoStack() {
+            return undoStack;
+        }
+
+        public Stack<Integer> getRedoStack() {
+            return redoStack;
+        }
+
+        @Override
+        protected Object handleGetObject(String key) {
+            return null;
+        }
+
+        @Override
+        public Enumeration<String> getKeys() {
+            return null;
+        }
     }
     //TODO: argument indicating of which type game we want to play
     public void resetGame(){
@@ -52,6 +73,27 @@ public class Game {
         return gameLogic.getBoard();
     }
 
+    public void save(){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("save_file.txt",false))) {
+            for (Integer value : gameSnapshot.getUndoStack()) {
+                bw.write(value.toString());
+            }
+            bw.newLine();
+            for (Integer value : gameSnapshot.getRedoStack()) {
+                bw.write(value.toString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public Field[][] loadMoves(){
+        List<Integer> moveList =new ArrayList<>(gameSnapshot.undoStack);
+        for (int i = moveList.size() - 1; i >= 0; i--) {
+            System.out.println(moveList.get(i));
+            gameLogic.tryMove(moveList.get(i));
+        }
+        return gameLogic.getBoard();
+    }
     public Field [][] redoMove(){
         if (gameSnapshot.redoStack.size()!=0){
             int columnIndex= gameSnapshot.redoStack.pop();

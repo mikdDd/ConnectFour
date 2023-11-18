@@ -15,6 +15,15 @@ public class GameFacade {
         game = Game.getGameInstance();
         game.resetGame();
     }
+    public void save(){
+        game.save();
+    }
+    public Field[][] loadMoves(){
+        return game.loadMoves();
+    }
+    public void loadGame(Game.GameSnapshot loadedSnapshot){
+        game=Game.getGameInstance(loadedSnapshot);
+    }
     public Field[][] sendMove(int columnIndex){
         return game.move(columnIndex);
     }
@@ -24,6 +33,7 @@ public class GameFacade {
     public Field[][] sendRedoMove(){
         return game.redoMove();
     }
+
     public Field.Colors getCurrentTurn(){
         return game.getCurrentTurn();
     }
