@@ -45,10 +45,12 @@ public class GameFacade {
     }
 
     public Field[][] sendMove(int columnIndex){
-
+        Field[][] boardBefore = Field.boardDeepCopy(game.getBoard());
         Field[][] boardAfterMove = game.move(columnIndex);
 
-
+        if(Field.boardDeepEqual(boardBefore, boardAfterMove) && columnIndex >= 0){  //move request sent but move is not possible
+            return boardAfterMove;
+        }
 
         gameSnapshots.push(game.save());
 

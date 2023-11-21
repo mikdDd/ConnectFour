@@ -38,5 +38,14 @@ public class Field implements Serializable {
         }
         return board;
     }
+    public static boolean boardDeepEqual(Field[][] board1, Field[][] board2){
+        for(int i = 0; i<board1.length; i++){
+            for(int j = 0; j<board1[0].length;j++){
+                if(!board1[i][j].color.equals(board2[i][j].color))
+                    return false;
+            }
+        }
+        return true;
+    }
 
 }
