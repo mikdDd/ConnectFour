@@ -1,15 +1,10 @@
 package com.example.connectfour;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Serializable;
-import java.net.Socket;
-import java.util.*;
 
 public class Game implements Serializable{
 
-
+    private Field.Colors winCondition;
     private GameLogicTemplate gameLogic;
     private static Game gameInstance;
     private static GameSnapshot gameSnapshot;
@@ -21,10 +16,7 @@ public class Game implements Serializable{
             gameInstance = new Game();
         }
         return gameInstance;
-//        gameInstance = new Game();
-
     }
-
 
 
     //TODO: argument indicating of which type game we want to play
@@ -37,7 +29,12 @@ public class Game implements Serializable{
 
     }
     public Field[][] move(int columnIndex){
-        gameLogic.tryMove(columnIndex);
+        //gameLogic.tryMove(columnIndex);
+        if (gameLogic.tryMove(columnIndex)){
+            winCondition=getCurrentTurn();
+        }else {
+            winCondition=null;
+        }
 
         return gameLogic.getBoard();
     }
@@ -58,6 +55,10 @@ public class Game implements Serializable{
         return gameLogic.getCurrentTurn();
     }
 
+    public Field.Colors getWinCondition(){
+        return winCondition;
+    }
+
     public static void debug_print(Field[][] board){
         System.out.println("");
         for(int i = 0; i< board.length; i++){
@@ -76,20 +77,10 @@ public class Game implements Serializable{
         private Field[][] gameState;
 
         private GameSnapshot(Field[][] gameState) {
-//            this.gameState = new Field[gameState.length][gameState[0].length];
-//
-//            for(int i = 0; i<gameState.length; i++){
-//                for(int j = 0; j<gameState[0].length;j++){
-//                    Field f = new Field(i,j,gameState[i][j].color);
-//                    this.gameState[i][j]=f;
-//                }
-//            }
             this.gameState = Field.boardDeepCopy(gameState);
         }
         private Field[][] getGameState(){
             return this.gameState;
         }
-
-
     }
 }

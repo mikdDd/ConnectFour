@@ -1,9 +1,6 @@
 package com.example.connectfour;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Stack;
 
 public class GameFacade {
@@ -80,6 +77,9 @@ public class GameFacade {
         return game.restore(gameSnapshot);
     }
 
+    public Field.Colors isWinConditionMet(){
+        return game.getWinCondition();
+    }
     public Field.Colors getCurrentTurn(){
         return game.getCurrentTurn();
     }

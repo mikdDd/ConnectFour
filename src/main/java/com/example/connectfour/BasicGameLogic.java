@@ -1,11 +1,9 @@
 package com.example.connectfour;
 
-import java.io.Serializable;
 
 public class BasicGameLogic extends GameLogicTemplate  {
     private static final int BASICGAMEROWCOUNT = 6;
     private static final int BASCIGAMECOLUMNCOUNT = 7;
-
 
     public BasicGameLogic(Field[][] board) {
         super(BASICGAMEROWCOUNT, BASCIGAMECOLUMNCOUNT);
@@ -28,18 +26,16 @@ public class BasicGameLogic extends GameLogicTemplate  {
             clearBoard();
     }
 
-
-
     @Override
-    public void tryMove(int columnIndex) {
+    public boolean tryMove(int columnIndex) {
         if(columnIndex < 0 || columnIndex > BASCIGAMECOLUMNCOUNT)
-            return;
+            return false;
         int rowIndex = -1;
         for (int i = 0; i < BASICGAMEROWCOUNT; i++) {
 
             if((!board[i][columnIndex].color.equals(Field.Colors.TRANSPARENT)) ){
 
-                if(i == 0) return;  //column full we should not proceed move
+                if(i == 0) return false;  //column full we should not proceed move
                 board[i-1][columnIndex].color = currentTurn;
                 rowIndex = i-1;
                 break;
@@ -52,8 +48,10 @@ public class BasicGameLogic extends GameLogicTemplate  {
         System.out.println(rowIndex+"::"+columnIndex);
         if(checkIfWon(rowIndex, columnIndex)){
             System.out.println("WIN!!!");
+            return true;
         }
         changeTurn();
+        return false;
     }
 
     @Override
