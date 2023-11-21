@@ -4,13 +4,17 @@ import java.io.Serializable;
 
 public abstract class GameLogicTemplate implements Serializable {
     protected Field[][] board;
+    protected Field.Colors winner;
     private final int boardColumnCount;  //final to force initialization in extending class
     private final int boardRowCount;
     protected Field.Colors firstTurn = Field.Colors.YELLOW;
     protected Field.Colors currentTurn = firstTurn;
 
-    public abstract boolean tryMove(int columnIndex);
+    public abstract void tryMove(int columnIndex);
     protected abstract void changeTurn();
+
+    protected abstract Field.Colors previousTurn();
+
     protected abstract boolean checkIfWon(int r, int c);
     GameLogicTemplate(int boardRowCount, int boardColumnCount){
         this.boardRowCount = boardRowCount;
@@ -26,6 +30,19 @@ public abstract class GameLogicTemplate implements Serializable {
 
         }
     }
+    protected boolean extensiveCheckIfWon(){
+        for(int i = 0; i < boardRowCount; i++){
+            for(int j = 0; j < boardColumnCount; j++){
+                if(checkIfWon(i,j)){
+                    System.out.println(i+"+"+j);
+                    winner = previousTurn();
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
     public Field[][] getBoard(){
         return board;
     }
@@ -33,6 +50,7 @@ public abstract class GameLogicTemplate implements Serializable {
     public Field.Colors getCurrentTurn() {
         return currentTurn;
     }
+
     protected int countFieldsOfColour(Field.Colors color){
         int counter = 0;
         for (int i = 0; i < boardRowCount; i++) {
@@ -42,5 +60,11 @@ public abstract class GameLogicTemplate implements Serializable {
             }
         }
         return counter;
+    }
+    public Field.Colors getWinner(){
+        return winner;
+    }
+    public void resetWinner(){
+        winner = null;
     }
 }

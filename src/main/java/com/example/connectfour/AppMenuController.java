@@ -39,7 +39,6 @@ public class AppMenuController {
         }
 
         Stack<Game.GameSnapshot> stack = (Stack<Game.GameSnapshot>) oi.readObject();
-
         oi.close();
         fi.close();
         System.out.println(stack.size());

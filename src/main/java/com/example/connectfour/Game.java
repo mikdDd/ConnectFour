@@ -29,12 +29,12 @@ public class Game implements Serializable{
 
     }
     public Field[][] move(int columnIndex){
-        //gameLogic.tryMove(columnIndex);
-        if (gameLogic.tryMove(columnIndex)){
-            winCondition=getCurrentTurn();
-        }else {
-            winCondition=null;
-        }
+        gameLogic.tryMove(columnIndex);
+//        if (gameLogic.tryMove(columnIndex)){
+//            winCondition=getCurrentTurn();
+//        }else {
+//            winCondition=null;
+//        }
 
         return gameLogic.getBoard();
     }
@@ -55,8 +55,11 @@ public class Game implements Serializable{
         return gameLogic.getCurrentTurn();
     }
 
-    public Field.Colors getWinCondition(){
-        return winCondition;
+    public Field.Colors getWinner(){
+        return gameLogic.winner;
+    }
+    public void resetWinner(){
+        gameLogic.resetWinner();
     }
 
     public static void debug_print(Field[][] board){
@@ -71,7 +74,9 @@ public class Game implements Serializable{
     public Field[][] getBoard(){
         return this.gameLogic.getBoard();
     }
-
+    public boolean extensiveCheckIfWon(){
+        return gameLogic.extensiveCheckIfWon();
+    }
     public class GameSnapshot implements Serializable {
 
         private Field[][] gameState;

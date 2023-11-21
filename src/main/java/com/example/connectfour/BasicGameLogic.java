@@ -8,12 +8,7 @@ public class BasicGameLogic extends GameLogicTemplate  {
     public BasicGameLogic(Field[][] board) {
         super(BASICGAMEROWCOUNT, BASCIGAMECOLUMNCOUNT);
         this.board = Field.boardDeepCopy(board);
-//            for(int i = 0; i<board.length; i++){
-//                for(int j = 0; j<board[0].length;j++){
-//                    Field f = new Field(i,j,board[i][j].color);
-//                    this.board[i][j]=f;
-//                }
-//            }
+
             if(countFieldsOfColour(Field.Colors.YELLOW) > countFieldsOfColour(Field.Colors.RED)){
                 this.currentTurn = Field.Colors.RED;
             } else {
@@ -27,15 +22,16 @@ public class BasicGameLogic extends GameLogicTemplate  {
     }
 
     @Override
-    public boolean tryMove(int columnIndex) {
+    public void tryMove(int columnIndex) {
+        if(winner!=null)return;
         if(columnIndex < 0 || columnIndex > BASCIGAMECOLUMNCOUNT)
-            return false;
+            return;
         int rowIndex = -1;
         for (int i = 0; i < BASICGAMEROWCOUNT; i++) {
 
             if((!board[i][columnIndex].color.equals(Field.Colors.TRANSPARENT)) ){
 
-                if(i == 0) return false;  //column full we should not proceed move
+                if(i == 0) return ;  //column full we should not proceed move
                 board[i-1][columnIndex].color = currentTurn;
                 rowIndex = i-1;
                 break;
@@ -48,10 +44,9 @@ public class BasicGameLogic extends GameLogicTemplate  {
         System.out.println(rowIndex+"::"+columnIndex);
         if(checkIfWon(rowIndex, columnIndex)){
             System.out.println("WIN!!!");
-            return true;
         }
         changeTurn();
-        return false;
+
     }
 
     @Override
@@ -62,12 +57,22 @@ public class BasicGameLogic extends GameLogicTemplate  {
             currentTurn = Field.Colors.RED;
         }
     }
+    @Override
+    protected Field.Colors previousTurn() {
+        if(currentTurn == Field.Colors.RED){
+            return Field.Colors.YELLOW;
+        } else {
+            return Field.Colors.RED;
+        }
+    }
 
     @Override
     protected boolean checkIfWon(int rowIndex, int colIndex) {
         //TODO: cleanup
         //row check
+        winner = null;
         Field.Colors color = board[rowIndex][colIndex].color;
+        if(color.equals(Field.Colors.TRANSPARENT)) return false;
         int columnIndexRight = colIndex+1;
         int columnRightCounter = 0;
         int columnIndexLeft = colIndex-1;
@@ -82,8 +87,11 @@ public class BasicGameLogic extends GameLogicTemplate  {
         }
         System.out.println((columnIndexRight-colIndex - 1)+ "XX"+(columnIndexLeft + colIndex - 1));
         System.out.println(columnLeftCounter+ "XX"+columnRightCounter);
-        if(columnLeftCounter + columnRightCounter + 1 == 4)
+        if(columnLeftCounter + columnRightCounter + 1 == 4){
+            winner = currentTurn;
             return true;
+        }
+
 
 
         //column check
@@ -100,8 +108,11 @@ public class BasicGameLogic extends GameLogicTemplate  {
             rowUpCounter++;
         }
        // System.out.println(columnLeftCounter+ "XX"+columnRightCounter);
-        if(rowDownCounter + rowUpCounter + 1 == 4)
+        if(rowDownCounter + rowUpCounter + 1 == 4){
+            winner = currentTurn;
             return true;
+        }
+
 
         //1diagonal check
         rowIndexDown = rowIndex + 1;
@@ -121,8 +132,11 @@ public class BasicGameLogic extends GameLogicTemplate  {
             upLeftCounter++;
         }
         // System.out.println(columnLeftCounter+ "XX"+columnRightCounter);
-        if(downRightCounter + upLeftCounter + 1 == 4)
+        if(downRightCounter + upLeftCounter + 1 == 4){
+            winner = currentTurn;
             return true;
+        }
+
 
         //2diagonal check
         rowIndexDown = rowIndex + 1;
@@ -144,7 +158,11 @@ public class BasicGameLogic extends GameLogicTemplate  {
         }
 
         if(upRightCounter + downLeftCounter + 1 == 4)
+        {
+            winner = currentTurn;
             return true;
+        }
+
         //TODO: FINISH GAME LOGIC
         //TODO: WIN information
         return false;

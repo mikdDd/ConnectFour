@@ -27,6 +27,7 @@ public class GameFacade {
             game.resetGame(stack.peek());
             System.out.println("STACK NOT NULL");
             gameSnapshots.pop();
+            game.extensiveCheckIfWon(); //to work after loading won game
         }
         undoneSnapshots = new Stack<>();
 
@@ -59,7 +60,7 @@ public class GameFacade {
         if(gameSnapshots.size() <= 1) {
             return game.getBoard();
         }
-
+        game.resetWinner();
 
         System.out.println("SIZE AFTER POP"+gameSnapshots.size());
 
@@ -74,11 +75,18 @@ public class GameFacade {
         }
         Game.GameSnapshot gameSnapshot = undoneSnapshots.pop();
         gameSnapshots.push(gameSnapshot);
-        return game.restore(gameSnapshot);
+
+        Field[][] restored = game.restore(gameSnapshot);
+        if(game.extensiveCheckIfWon()){
+            System.out.println("DDDDDD");
+            System.out.println(game.getWinner());
+            game.getWinner();
+        }
+        return restored;
     }
 
-    public Field.Colors isWinConditionMet(){
-        return game.getWinCondition();
+    public Field.Colors getGameWinner(){
+        return game.getWinner();
     }
     public Field.Colors getCurrentTurn(){
         return game.getCurrentTurn();
