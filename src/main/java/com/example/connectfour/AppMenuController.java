@@ -8,18 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Objects;
-import java.util.ResourceBundle;
 import java.util.Stack;
 
 public class AppMenuController {
-    @FXML
-    private Label welcomeText;
 
     @FXML
     public void onStartGameButtonClick(ActionEvent event) throws IOException {
@@ -44,8 +37,6 @@ public class AppMenuController {
         } catch (FileNotFoundException e){
             return;
         }
-
-
 
         Stack<Game.GameSnapshot> stack = (Stack<Game.GameSnapshot>) oi.readObject();
 

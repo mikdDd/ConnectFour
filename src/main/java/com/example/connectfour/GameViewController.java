@@ -1,18 +1,21 @@
 package com.example.connectfour;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
@@ -38,7 +41,7 @@ public class GameViewController implements Initializable {
         updateView(gameFacade.sendMove(-1));  //just to update view
     }
 
-    private void requestMove(int columnIndex){
+    private void requestMove(int columnIndex) throws IOException {
         Field[][] board = gameFacade.sendMove(columnIndex);
         updateView(board);
     }
@@ -54,7 +57,7 @@ public class GameViewController implements Initializable {
     }
 
     @FXML
-    private void mousePressed(MouseEvent event) {
+    private void mousePressed(MouseEvent event) throws IOException {
         Node source = (Node)event.getSource() ;
         System.out.println(source);
 
@@ -62,6 +65,9 @@ public class GameViewController implements Initializable {
         Integer rowIndex = GridPane.getRowIndex(source);
         System.out.printf("Mouse entered cell [%d, %d]%n", colIndex, rowIndex);
         requestMove(colIndex);
+        if (gameFacade.isWinConditionMet()!=null){
+            onWinConditionMet(gameFacade.getCurrentTurn(),(Stage) source.getScene().getWindow());
+        }
     }
     private void updateView(Field[][] board){
         turnIndicator.setFill(Field.getFXColor(gameFacade.getCurrentTurn()));
@@ -80,8 +86,6 @@ public class GameViewController implements Initializable {
                 c.setFill(Color.WHITE);
             }
         }
-
-
     }
     @FXML
     void onRedoButtonClick(MouseEvent event) {
@@ -98,5 +102,17 @@ public class GameViewController implements Initializable {
     @FXML
     void onUndoButtonClick(MouseEvent event) {
         requestUndoMove();
+    }
+    public void onWinConditionMet(Field.Colors currentTurn, Stage gameView) throws IOException {
+        FXMLLoader loader=new FXMLLoader();
+        loader.getNamespace().put("color",currentTurn.toString());
+        loader.setLocation(getClass().getResource("win_condition_view.fxml"));
+        Parent root=loader.load();
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(root,250,250));
+        stage.setOnCloseRequest(event -> gameView.close());
+        stage.show();
     }
 }

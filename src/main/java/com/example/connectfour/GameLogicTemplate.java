@@ -9,7 +9,7 @@ public abstract class GameLogicTemplate implements Serializable {
     protected Field.Colors firstTurn = Field.Colors.YELLOW;
     protected Field.Colors currentTurn = firstTurn;
 
-    public abstract void tryMove(int columnIndex);
+    public abstract boolean tryMove(int columnIndex);
     protected abstract void changeTurn();
     protected abstract boolean checkIfWon(int r, int c);
     GameLogicTemplate(int boardRowCount, int boardColumnCount){
