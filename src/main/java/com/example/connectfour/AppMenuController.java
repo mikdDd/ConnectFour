@@ -9,10 +9,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -39,8 +36,15 @@ public class AppMenuController {
     public void onLoadFromFileButtonClick(ActionEvent event) throws IOException, ClassNotFoundException {
         FXMLLoader loader=new FXMLLoader(getClass().getResource("game-view.fxml"));
 
-        FileInputStream fi = new FileInputStream(new File("save_file.txt"));
-        ObjectInputStream oi = new ObjectInputStream(fi);
+        FileInputStream fi;
+        ObjectInputStream oi;
+        try{
+            fi = new FileInputStream(new File("save_file.txt"));
+            oi = new ObjectInputStream(fi);
+        } catch (FileNotFoundException e){
+            return;
+        }
+
 
 
         Stack<Game.GameSnapshot> stack = (Stack<Game.GameSnapshot>) oi.readObject();
