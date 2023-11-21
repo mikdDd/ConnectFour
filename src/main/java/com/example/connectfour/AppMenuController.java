@@ -9,11 +9,15 @@ import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+import java.util.ResourceBundle;
 import java.util.Stack;
 
 public class AppMenuController {
@@ -32,35 +36,24 @@ public class AppMenuController {
     }
 
     @FXML
-    public void onLoadFromFileButtonClick(ActionEvent event) throws IOException {
+    public void onLoadFromFileButtonClick(ActionEvent event) throws IOException, ClassNotFoundException {
         FXMLLoader loader=new FXMLLoader(getClass().getResource("game-view.fxml"));
 
-        Game.GameSnapshot gameSnapshot = readLines();
-        loader.setResources(gameSnapshot);
+        FileInputStream fi = new FileInputStream(new File("save_file.txt"));
+        ObjectInputStream oi = new ObjectInputStream(fi);
 
+
+        Stack<Game.GameSnapshot> stack = (Stack<Game.GameSnapshot>) oi.readObject();
+
+        oi.close();
+        fi.close();
+        System.out.println(stack.size());
+        loader.setControllerFactory(gameViewController -> new GameViewController(stack));
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(new Scene(loader.load()));
         stage.show();
     }
 
-    private Game.GameSnapshot readLines(){
-        Game.GameSnapshot gameSnapshot= new Game.GameSnapshot(new Stack<Integer>(),new Stack<Integer>());
 
-        try {
-            List<String> allLines= Files.readAllLines(Paths.get("save_file.txt"));
-            String undoString=allLines.get(0);
-            for (int i=0;i<undoString.length();i++){
-                gameSnapshot.getUndoStack().push(Character.getNumericValue(undoString.charAt(i)));
-            }
-            String redoString=allLines.get(1);
-            for (int i=0;i<redoString.length();i++){
-                gameSnapshot.getRedoStack().push(Character.getNumericValue(redoString.charAt(i)));
-            }
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return gameSnapshot;
-    }
 }

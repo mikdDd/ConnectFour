@@ -1,42 +1,39 @@
 package com.example.connectfour;
 
-public class BasicGameLogic extends GameLogicTemplate{
+import java.io.Serializable;
+
+public class BasicGameLogic extends GameLogicTemplate  {
     private static final int BASICGAMEROWCOUNT = 6;
     private static final int BASCIGAMECOLUMNCOUNT = 7;
 
 
+    public BasicGameLogic(Field[][] board) {
+        super(BASICGAMEROWCOUNT, BASCIGAMECOLUMNCOUNT);
+        this.board = Field.boardDeepCopy(board);
+//            for(int i = 0; i<board.length; i++){
+//                for(int j = 0; j<board[0].length;j++){
+//                    Field f = new Field(i,j,board[i][j].color);
+//                    this.board[i][j]=f;
+//                }
+//            }
+            if(countFieldsOfColour(Field.Colors.YELLOW) > countFieldsOfColour(Field.Colors.RED)){
+                this.currentTurn = Field.Colors.RED;
+            } else {
+                this.currentTurn = Field.Colors.YELLOW;
+            }
+
+    }
     public BasicGameLogic() {
         super(BASICGAMEROWCOUNT, BASCIGAMECOLUMNCOUNT);
-        clearBoard();
+            clearBoard();
     }
 
-    @Override
-    public void tryUndo(int columnIndex) {
-        for (int i=0; i<BASICGAMEROWCOUNT; i++){
-            if ( !board[i][columnIndex].color.equals(Field.Colors.TRANSPARENT)){
-                board[i][columnIndex].color=Field.Colors.TRANSPARENT;
-                break;
-            }
-        }
-        changeTurn();
-    }
 
-    @Override
-    public void tryRedo(int columnIndex) {
-        for (int i=0; i<BASICGAMEROWCOUNT; i++){
-            if ( !board[i][columnIndex].color.equals(Field.Colors.TRANSPARENT)){
-                board[i-1][columnIndex].color=currentTurn;
-                break;
-            }
-            if (i==BASICGAMEROWCOUNT-1){
-                board[BASICGAMEROWCOUNT -1][columnIndex].color=currentTurn;
-            }
-        }
-        changeTurn();
-    }
 
     @Override
     public void tryMove(int columnIndex) {
+        if(columnIndex < 0 || columnIndex > BASCIGAMECOLUMNCOUNT)
+            return;
         int rowIndex = -1;
         for (int i = 0; i < BASICGAMEROWCOUNT; i++) {
 
@@ -151,6 +148,7 @@ public class BasicGameLogic extends GameLogicTemplate{
         if(upRightCounter + downLeftCounter + 1 == 4)
             return true;
         //TODO: FINISH GAME LOGIC
+        //TODO: WIN information
         return false;
     }
 }

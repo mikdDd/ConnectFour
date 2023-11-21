@@ -9,8 +9,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Stack;
 
 public class GameViewController implements Initializable {
     private GameFacade gameFacade;
@@ -18,20 +22,22 @@ public class GameViewController implements Initializable {
     private GridPane GridPane;
     @FXML
     private Circle turnIndicator;
+    public GameViewController(Stack<Game.GameSnapshot> stack){
+        gameFacade = GameFacade.getGameFacadeInstance();
+        gameFacade.initGame(stack);
+
+    }
+    public GameViewController(){
+        gameFacade = GameFacade.getGameFacadeInstance();
+        gameFacade.initGame(null);
+
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        gameFacade = GameFacade.getGameFacadeInstance();
-        Game.GameSnapshot loadedSnapshot=(Game.GameSnapshot)resourceBundle;
-        if (loadedSnapshot==null){//initialize new game
-            gameFacade.initGame();
-        }else {//load game
-            gameFacade.loadGame(loadedSnapshot);
-        }
         turnIndicator.setFill(Field.getFXColor(gameFacade.getCurrentTurn()));
-        requestLoad();
+        updateView(gameFacade.sendMove(-1));  //just to update view
     }
 
-    //TODO:
     private void requestMove(int columnIndex){
         Field[][] board = gameFacade.sendMove(columnIndex);
         updateView(board);
@@ -43,15 +49,8 @@ public class GameViewController implements Initializable {
     }
     private void requestUndoMove(){
         Field[][] board= gameFacade.sendUndoMove();
+        System.out.println(board);
         updateView(board);
-    }
-    private void requestLoad(){
-        Field[][] board=gameFacade.loadMoves();
-        updateView(board);
-    }
-
-    private void requestSave(){
-        gameFacade.save();
     }
 
     @FXML
@@ -67,7 +66,6 @@ public class GameViewController implements Initializable {
     private void updateView(Field[][] board){
         turnIndicator.setFill(Field.getFXColor(gameFacade.getCurrentTurn()));
         ObservableList<Node> nodeList = GridPane.getChildren();
-
         for (Node node : nodeList){
             Integer colIndex = GridPane.getColumnIndex(node);
             Integer rowIndex = GridPane.getRowIndex(node);
@@ -91,8 +89,8 @@ public class GameViewController implements Initializable {
     }
 
     @FXML
-    void onSaveButtonClick(MouseEvent event) {
-        requestSave();
+    void onSaveButtonClick(MouseEvent event) throws IOException {
+        gameFacade.saveStackToFile();
         Stage stage=(Stage) GridPane.getScene().getWindow();
         stage.close();
     }
