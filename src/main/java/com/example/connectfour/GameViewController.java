@@ -25,10 +25,7 @@ public class GameViewController implements Initializable {
     private GridPane GridPane;
     @FXML
     private Circle turnIndicator;
-//    public GameViewController(Stack<Game.GameSnapshot> stack){
-//        gameFacade = GameFacade.getGameFacadeInstance();
-//        gameFacade.initGame(stack);
-//    }
+
     public GameViewController(Stack<Game.GameSnapshot> stack){
         gameFacade = GameFacade.getGameFacadeInstance();
         gameFacade.initGame(stack);
@@ -69,11 +66,10 @@ public class GameViewController implements Initializable {
         Integer rowIndex = GridPane.getRowIndex(source);
         System.out.printf("Mouse entered cell [%d, %d]%n", colIndex, rowIndex);
 
-       // if (gameFacade.getGameWinner()==null){
-            requestMove(colIndex);
-       // }
+        requestMove(colIndex);
+
         if (gameFacade.getGameWinner()!=null){
-            onWinConditionMet(gameFacade.getGameWinner(),(Stage) source.getScene().getWindow());
+            onWinConditionMet(gameFacade.getGameWinner());
         }
     }
     private void updateView(Field[][] board){
@@ -98,7 +94,7 @@ public class GameViewController implements Initializable {
     void onRedoButtonClick(MouseEvent event) throws IOException {
         requestRedoMove();
         if (gameFacade.getGameWinner()!=null){
-            onWinConditionMet(gameFacade.getGameWinner(), (Stage) GridPane.getScene().getWindow());
+            onWinConditionMet(gameFacade.getGameWinner());
         }
     }
 
@@ -113,7 +109,7 @@ public class GameViewController implements Initializable {
     void onUndoButtonClick(MouseEvent event) {
         requestUndoMove();
     }
-    public void onWinConditionMet(Field.Colors currentTurn, Stage gameView) throws IOException {
+    private void onWinConditionMet(Field.Colors currentTurn) throws IOException {
         FXMLLoader loader=new FXMLLoader();
         loader.getNamespace().put("color",currentTurn.toString());
         loader.setLocation(getClass().getResource("win_condition_view.fxml"));
@@ -122,7 +118,6 @@ public class GameViewController implements Initializable {
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(new Scene(root,250,250));
-        //stage.setOnCloseRequest(event -> gameView.close());
         stage.show();
     }
 }

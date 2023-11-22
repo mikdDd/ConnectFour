@@ -3,8 +3,6 @@ package com.example.connectfour;
 import java.io.Serializable;
 
 public class Game implements Serializable{
-
-    private Field.Colors winCondition;
     private GameLogicTemplate gameLogic;
     private static Game gameInstance;
     private static GameSnapshot gameSnapshot;
@@ -18,7 +16,6 @@ public class Game implements Serializable{
         return gameInstance;
     }
 
-
     //TODO: argument indicating of which type game we want to play
     public void resetGame(GameSnapshot gameSnapshot){
         if(gameSnapshot == null){
@@ -30,12 +27,6 @@ public class Game implements Serializable{
     }
     public Field[][] move(int columnIndex){
         gameLogic.tryMove(columnIndex);
-//        if (gameLogic.tryMove(columnIndex)){
-//            winCondition=getCurrentTurn();
-//        }else {
-//            winCondition=null;
-//        }
-
         return gameLogic.getBoard();
     }
 
@@ -62,15 +53,6 @@ public class Game implements Serializable{
         gameLogic.resetWinner();
     }
 
-    public static void debug_print(Field[][] board){
-        System.out.println("");
-        for(int i = 0; i< board.length; i++){
-            for(int j = 0; j < board[0].length; j++){
-                System.out.print("["+board[i][j].color+"]");
-            }
-            System.out.println("");
-        }
-    }
     public Field[][] getBoard(){
         return this.gameLogic.getBoard();
     }

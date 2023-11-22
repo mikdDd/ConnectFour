@@ -61,9 +61,6 @@ public abstract class GameLogicTemplate implements Serializable {
         }
         return counter;
     }
-    public Field.Colors getWinner(){
-        return winner;
-    }
     public void resetWinner(){
         winner = null;
     }

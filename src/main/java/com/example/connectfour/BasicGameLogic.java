@@ -163,8 +163,6 @@ public class BasicGameLogic extends GameLogicTemplate  {
             return true;
         }
 
-        //TODO: FINISH GAME LOGIC
-        //TODO: WIN information
         return false;
     }
 }
