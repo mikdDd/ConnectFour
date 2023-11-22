@@ -2,10 +2,9 @@ package com.example.connectfour;
 
 import java.io.Serializable;
 
-public class Game implements Serializable{
+public class Game{
     private GameLogicTemplate gameLogic;
     private static Game gameInstance;
-    private static GameSnapshot gameSnapshot;
 
     private Game(){}
 
@@ -16,7 +15,6 @@ public class Game implements Serializable{
         return gameInstance;
     }
 
-    //TODO: argument indicating of which type game we want to play
     public void resetGame(GameSnapshot gameSnapshot){
         if(gameSnapshot == null){
             gameLogic = new BasicGameLogic();
@@ -59,9 +57,9 @@ public class Game implements Serializable{
     public boolean extensiveCheckIfWon(){
         return gameLogic.extensiveCheckIfWon();
     }
-    public class GameSnapshot implements Serializable {
+    public static class GameSnapshot implements Serializable {
 
-        private Field[][] gameState;
+        private final Field[][] gameState;
 
         private GameSnapshot(Field[][] gameState) {
             this.gameState = Field.boardDeepCopy(gameState);

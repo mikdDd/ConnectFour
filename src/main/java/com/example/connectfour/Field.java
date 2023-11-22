@@ -5,8 +5,8 @@ import javafx.scene.paint.Color;
 import java.io.Serializable;
 
 public class Field implements Serializable {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
     public Colors color;
 
     public Field(int x, int y, Colors color) {

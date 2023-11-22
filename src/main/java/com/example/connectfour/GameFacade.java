@@ -21,19 +21,17 @@ public class GameFacade {
         if(stack == null){
             gameSnapshots = new Stack<>();
             game.resetGame(null);
-            System.out.println("CREATING NEW STACK");
         } else {
             gameSnapshots = stack;
             game.resetGame(stack.peek());
-            System.out.println("STACK NOT NULL");
             gameSnapshots.pop();
-            game.extensiveCheckIfWon(); //to work after loading won game
+            game.extensiveCheckIfWon(); //to make it work after loading won game
         }
         undoneSnapshots = new Stack<>();
 
     }
     public void saveStackToFile() throws IOException {
-        FileOutputStream f = new FileOutputStream(new File("save_file.txt"));
+        FileOutputStream f = new FileOutputStream("save_file.txt");
         ObjectOutputStream o = new ObjectOutputStream(f);
 
         o.writeObject(gameSnapshots);
@@ -62,14 +60,11 @@ public class GameFacade {
         }
         game.resetWinner();
 
-        System.out.println("SIZE AFTER POP"+gameSnapshots.size());
-
         Game.GameSnapshot lastMove = gameSnapshots.pop();
         undoneSnapshots.push(lastMove);
         return game.restore(gameSnapshots.peek());
     }
     public Field[][] sendRedoMove(){
-        System.out.println("RESTORING");
         if(undoneSnapshots.isEmpty()){
             return game.getBoard();
         }
@@ -78,8 +73,6 @@ public class GameFacade {
 
         Field[][] restored = game.restore(gameSnapshot);
         if(game.extensiveCheckIfWon()){
-            System.out.println("DDDDDD");
-            System.out.println(game.getWinner());
             game.getWinner();
         }
         return restored;

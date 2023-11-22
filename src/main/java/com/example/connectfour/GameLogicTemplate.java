@@ -34,7 +34,6 @@ public abstract class GameLogicTemplate implements Serializable {
         for(int i = 0; i < boardRowCount; i++){
             for(int j = 0; j < boardColumnCount; j++){
                 if(checkIfWon(i,j)){
-                    System.out.println(i+"+"+j);
                     winner = previousTurn();
                     return true;
                 }

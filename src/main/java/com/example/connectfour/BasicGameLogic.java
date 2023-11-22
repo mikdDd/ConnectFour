@@ -41,10 +41,8 @@ public class BasicGameLogic extends GameLogicTemplate  {
                 rowIndex = BASICGAMEROWCOUNT - 1;
             }
         }
-        System.out.println(rowIndex+"::"+columnIndex);
-        if(checkIfWon(rowIndex, columnIndex)){
-            System.out.println("WIN!!!");
-        }
+
+        checkIfWon(rowIndex, columnIndex);
         changeTurn();
 
     }
@@ -68,9 +66,10 @@ public class BasicGameLogic extends GameLogicTemplate  {
 
     @Override
     protected boolean checkIfWon(int rowIndex, int colIndex) {
-        //TODO: cleanup
-        //row check
+
         winner = null;
+
+        //row check
         Field.Colors color = board[rowIndex][colIndex].color;
         if(color.equals(Field.Colors.TRANSPARENT)) return false;
         int columnIndexRight = colIndex+1;
@@ -85,14 +84,11 @@ public class BasicGameLogic extends GameLogicTemplate  {
             columnIndexRight++;
             columnRightCounter++;
         }
-        System.out.println((columnIndexRight-colIndex - 1)+ "XX"+(columnIndexLeft + colIndex - 1));
-        System.out.println(columnLeftCounter+ "XX"+columnRightCounter);
+
         if(columnLeftCounter + columnRightCounter + 1 == 4){
             winner = currentTurn;
             return true;
         }
-
-
 
         //column check
         int rowIndexDown = rowIndex+1;
@@ -107,7 +103,7 @@ public class BasicGameLogic extends GameLogicTemplate  {
             rowIndexUp--;
             rowUpCounter++;
         }
-       // System.out.println(columnLeftCounter+ "XX"+columnRightCounter);
+
         if(rowDownCounter + rowUpCounter + 1 == 4){
             winner = currentTurn;
             return true;
@@ -131,7 +127,7 @@ public class BasicGameLogic extends GameLogicTemplate  {
             colIndexLeft--;
             upLeftCounter++;
         }
-        // System.out.println(columnLeftCounter+ "XX"+columnRightCounter);
+
         if(downRightCounter + upLeftCounter + 1 == 4){
             winner = currentTurn;
             return true;
@@ -145,7 +141,7 @@ public class BasicGameLogic extends GameLogicTemplate  {
         rowIndexUp = rowIndex-1;
         colIndexLeft = colIndex - 1;
         int upRightCounter = 0;
-        System.out.println("RD"+rowIndexDown);
+
         while(rowIndexUp >= 0 && colIndexRight < BASCIGAMECOLUMNCOUNT && board[rowIndexUp][colIndexRight].color == color){
             rowIndexUp--;
             colIndexRight++;
@@ -157,8 +153,7 @@ public class BasicGameLogic extends GameLogicTemplate  {
             downLeftCounter++;
         }
 
-        if(upRightCounter + downLeftCounter + 1 == 4)
-        {
+        if(upRightCounter + downLeftCounter + 1 == 4) {
             winner = currentTurn;
             return true;
         }
